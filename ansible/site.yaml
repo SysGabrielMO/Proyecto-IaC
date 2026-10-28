@@ -1,0 +1,5 @@
+- name: Configuración común
+  hosts: all
+  become: true
+  roles:
+    - commons
