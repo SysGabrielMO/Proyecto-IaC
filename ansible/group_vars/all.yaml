@@ -1,0 +1,15 @@
+# Red de datos
+ip_datos_web: 10.0.100.10
+ip_datos_bd: 10.0.100.20
+
+# Base de datos de la aplicación
+bd_nombre: guestbook
+bd_usuario: guestbook
+bd_password: guestbook
+
+# Paquetes que se instalan en todas las máquinas
+paquetes_comunes:
+  - vim
+  - curl
+  - git
+  - htop
