@@ -30,6 +30,7 @@ resource "libvirt_volume" "web_disk" {
   base_volume_name = var.imagen_web
   base_volume_pool = var.libvirt_pool_name
   format           = "qcow2"
+  size             = var.tamano_disco * 1024 * 1024 * 1024
 }
 
 resource "libvirt_cloudinit_disk" "web_cloudinit" {
@@ -86,6 +87,7 @@ resource "libvirt_volume" "bd_disk" {
   base_volume_name = var.imagen_bd
   base_volume_pool = var.libvirt_pool_name
   format           = "qcow2"
+  size             = var.tamano_disco * 1024 * 1024 * 1024
 }
 
 resource "libvirt_cloudinit_disk" "bd_cloudinit" {

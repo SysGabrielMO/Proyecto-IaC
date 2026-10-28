@@ -57,3 +57,9 @@ variable "ssh_public_key" {
   type        = string
   default     = "~/.ssh/id_rsa.pub"
 }
+
+variable "tamano_disco" {
+  description = "Tamaño del disco de las máquinas en GiB"
+  type        = number
+  default     = 10
+}
