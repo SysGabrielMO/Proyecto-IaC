@@ -1,0 +1,9 @@
+[servidores_web]
+web ansible_host=${ip_web}
+
+[servidores_bd]
+bd ansible_host=${ip_bd}
+
+[all:vars]
+ansible_user=${usuario}
+ansible_python_interpreter=/usr/bin/python3
