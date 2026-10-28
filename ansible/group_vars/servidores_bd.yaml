@@ -1,0 +1,4 @@
+mariadb_socket: /run/mysqld/mysqld.sock
+mariadb_config: /etc/mysql/mariadb.conf.d/50-server.cnf
+schema_url: https://raw.githubusercontent.com/josedom24/guestbook_php/main/schema.sql
+schema_ruta: /root/schema.sql
