@@ -134,3 +134,14 @@ resource "libvirt_domain" "bd" {
     target_type = "serial"
   }
 }
+
+# Inventario de Ansible generado a partir de las IP de las máquinas
+resource "local_file" "inventario" {
+  filename        = "${path.module}/../ansible/hosts"
+  file_permission = "0644"
+  content = templatefile("${path.module}/inventario.tftpl", {
+    ip_web  = libvirt_domain.web.network_interface[0].addresses[0]
+    ip_bd   = libvirt_domain.bd.network_interface[0].addresses[0]
+    usuario = var.usuario
+  })
+}
