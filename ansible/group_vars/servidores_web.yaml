@@ -1,0 +1,11 @@
+vhost_nombre: www.gabrielmerencio.org
+vhost_docroot: /var/www/guestbook
+app_repo: https://github.com/josedom24/guestbook_php.git
+
+paquetes_web:
+  - apache2
+  - php
+  - libapache2-mod-php
+  - php-mysql
+  - php-mbstring
+  - mariadb-client
