@@ -2,3 +2,17 @@ mariadb_socket: /run/mysqld/mysqld.sock
 mariadb_config: /etc/mysql/mariadb.conf.d/50-server.cnf
 schema_url: https://raw.githubusercontent.com/josedom24/guestbook_php/main/schema.sql
 schema_ruta: /root/schema.sql
+
+# Disco de datos (LVM)
+disco_datos: /dev/vdb
+vg_datos: vg_datos
+lv_datos: lv_mysql
+mysql_datadir: /var/lib/mariadb
+
+# Disco de copias de seguridad
+disco_backup: /dev/vdc
+backup_dir: /var/backups/mariadb
+backup_script: /usr/local/sbin/backup-mariadb.sh
+backup_hora: "3"
+backup_minuto: "0"
+backup_dias: 7

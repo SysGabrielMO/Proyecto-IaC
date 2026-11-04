@@ -1,3 +1,32 @@
+- name: Instalar LVM
+  ansible.builtin.apt:
+    name: lvm2
+    state: present
+
+- name: Crear el grupo de volúmenes en el disco de datos
+  community.general.lvg:
+    vg: "{{ vg_datos }}"
+    pvs: "{{ disco_datos }}"
+
+- name: Crear el volumen lógico dejando un 20% libre para ampliarlo
+  community.general.lvol:
+    vg: "{{ vg_datos }}"
+    lv: "{{ lv_datos }}"
+    size: 80%VG
+    shrink: false
+
+- name: Crear el sistema de ficheros del volumen de datos
+  community.general.filesystem:
+    fstype: ext4
+    dev: "/dev/{{ vg_datos }}/{{ lv_datos }}"
+
+- name: Montar el volumen en el directorio de datos de MariaDB
+  ansible.posix.mount:
+    path: "{{ mysql_datadir }}"
+    src: "/dev/{{ vg_datos }}/{{ lv_datos }}"
+    fstype: ext4
+    state: mounted
+
 - name: Instalar MariaDB y la librería de Python para gestionarla
   ansible.builtin.apt:
     name:
