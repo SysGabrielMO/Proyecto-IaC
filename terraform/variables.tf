@@ -63,3 +63,15 @@ variable "tamano_disco" {
   type        = number
   default     = 10
 }
+
+variable "tamano_disco_datos" {
+  description = "Tamaño del disco de datos de MariaDB en GiB"
+  type        = number
+  default     = 5
+}
+
+variable "tamano_disco_backup" {
+  description = "Tamaño del disco de copias de seguridad en GiB"
+  type        = number
+  default     = 5
+}

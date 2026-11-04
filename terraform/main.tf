@@ -130,6 +130,14 @@ resource "libvirt_domain" "bd" {
     volume_id = libvirt_volume.bd_disk.id
   }
 
+  disk {
+    volume_id = libvirt_volume.bd_datos.id
+  }
+
+  disk {
+    volume_id = libvirt_volume.bd_backup.id
+  }
+
   console {
     type        = "pty"
     target_port = "0"
@@ -146,4 +154,21 @@ resource "local_file" "inventario" {
     ip_bd   = libvirt_domain.bd.network_interface[0].addresses[0]
     usuario = var.usuario
   })
+}
+
+
+# Disco de datos de MariaDB: vacío e independiente del disco del sistema
+resource "libvirt_volume" "bd_datos" {
+  name   = "iac-bd-datos.qcow2"
+  pool   = var.libvirt_pool_name
+  format = "qcow2"
+  size   = var.tamano_disco_datos * 1024 * 1024 * 1024
+}
+
+# Disco de copias de seguridad
+resource "libvirt_volume" "bd_backup" {
+  name   = "iac-bd-backup.qcow2"
+  pool   = var.libvirt_pool_name
+  format = "qcow2"
+  size   = var.tamano_disco_backup * 1024 * 1024 * 1024
 }
