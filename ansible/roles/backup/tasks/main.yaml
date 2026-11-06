@@ -1,0 +1,40 @@
+- name: Instalar cron
+  ansible.builtin.apt:
+    name: cron
+    state: present
+
+- name: Crear el sistema de ficheros del disco de copias
+  community.general.filesystem:
+    fstype: ext4
+    dev: "{{ disco_backup }}"
+
+- name: Montar el disco de copias
+  ansible.posix.mount:
+    path: "{{ backup_dir }}"
+    src: "{{ disco_backup }}"
+    fstype: ext4
+    opts: defaults,nofail
+    state: mounted
+
+- name: Permisos del directorio de copias
+  ansible.builtin.file:
+    path: "{{ backup_dir }}"
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Instalar el script de copia de seguridad
+  ansible.builtin.template:
+    src: backup-mariadb.sh.j2
+    dest: "{{ backup_script }}"
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Programar la copia diaria
+  ansible.builtin.cron:
+    name: Copia de seguridad de MariaDB
+    user: root
+    hour: "{{ backup_hora }}"
+    minute: "{{ backup_minuto }}"
+    job: "{{ backup_script }} >> /var/log/backup-mariadb.log 2>&1"

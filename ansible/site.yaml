@@ -9,7 +9,8 @@
   become: true
   roles:
     - bd
-
+    - backup
+ 
 - name: Servidor web
   hosts: servidores_web
   become: true

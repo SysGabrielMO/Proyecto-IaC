@@ -1,0 +1,16 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+DESTINO="{{ backup_dir }}"
+BD="{{ bd_nombre }}"
+FICHERO="$DESTINO/$BD-$(date +%Y%m%d-%H%M).sql.gz"
+
+mariadb-dump --single-transaction "$BD" | gzip > "$FICHERO"
+if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+  printf "%s ERROR: la copia ha fallado\n" "$(date '+%F %T')"
+  rm -f "$FICHERO"
+  exit 1
+fi
+
+printf "%s Copia creada: %s\n" "$(date '+%F %T')" "$FICHERO"
+find "$DESTINO" -name "$BD-*.sql.gz" -mtime +{{ backup_dias }} -delete
