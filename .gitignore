@@ -1,8 +1,8 @@
 # Terraform
-terraform/.terraform/
-terraform/*.tfstate
-terraform/*.tfstate.*
-terraform/crash.log
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
 
 # Inventario generado por Terraform
 ansible/hosts
@@ -12,3 +12,6 @@ ansible/hosts
 *.img
 *.iso
 *.sql.gz
+
+# Notas personales
+Modificaciones.txt
