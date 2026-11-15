@@ -1,0 +1,7 @@
+- name: Activar el reenvío de paquetes de forma permanente
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_file: /etc/sysctl.d/99-router.conf
+    state: present
+    reload: true
