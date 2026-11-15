@@ -4,6 +4,9 @@ web ansible_host=${ip_web}
 [servidores_bd]
 bd ansible_host=${ip_bd}
 
+[servidores_bd:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${usuario}@${ip_web}"'
+
 [all:vars]
 ansible_user=${usuario}
 ansible_python_interpreter=/usr/bin/python3

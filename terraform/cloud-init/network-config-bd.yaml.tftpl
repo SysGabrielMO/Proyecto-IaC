@@ -1,0 +1,14 @@
+version: 2
+ethernets:
+  datos:
+    match:
+      macaddress: "${mac_datos}"
+    dhcp4: false
+    addresses:
+      - ${ip_datos}/24
+    routes:
+      - to: default
+        via: ${gateway}
+    nameservers:
+      addresses:
+        - ${dns}

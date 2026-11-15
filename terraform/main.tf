@@ -18,7 +18,6 @@ resource "libvirt_network" "red_datos" {
 locals {
   mac_web_nat   = "52:54:00:10:00:0a"
   mac_web_datos = "52:54:00:20:00:0a"
-  mac_bd_nat    = "52:54:00:10:00:14"
   mac_bd_datos  = "52:54:00:20:00:14"
   ssh_key       = trimspace(file(pathexpand(var.ssh_public_key)))
 }
@@ -81,6 +80,7 @@ resource "libvirt_domain" "web" {
 }
 
 # Servidor de base de datos (Ubuntu 26.04)
+# Solo está en la red de datos: sale a Internet a través de web
 resource "libvirt_volume" "bd_disk" {
   name             = "iac-bd.qcow2"
   pool             = var.libvirt_pool_name
@@ -98,10 +98,11 @@ resource "libvirt_cloudinit_disk" "bd_cloudinit" {
     usuario  = var.usuario
     ssh_key  = local.ssh_key
   })
-  network_config = templatefile("${path.module}/cloud-init/network-config.yaml.tftpl", {
-    mac_nat   = local.mac_bd_nat
+  network_config = templatefile("${path.module}/cloud-init/network-config-bd.yaml.tftpl", {
     mac_datos = local.mac_bd_datos
     ip_datos  = var.ip_datos_bd
+    gateway   = var.ip_datos_web
+    dns       = var.dns_bd
   })
 }
 
@@ -113,12 +114,6 @@ resource "libvirt_domain" "bd" {
 
   cpu {
     mode = "host-passthrough"
-  }
-
-  network_interface {
-    network_id     = libvirt_network.red_nat.id
-    mac            = local.mac_bd_nat
-    wait_for_lease = true
   }
 
   network_interface {
@@ -145,17 +140,16 @@ resource "libvirt_domain" "bd" {
   }
 }
 
-# Inventario de Ansible generado a partir de las IP de las máquinas
+# Inventario de Ansible: web por su IP de la red NAT, bd por su IP de datos
 resource "local_file" "inventario" {
   filename        = "${path.module}/../ansible/hosts"
   file_permission = "0644"
   content = templatefile("${path.module}/inventario.tftpl", {
     ip_web  = libvirt_domain.web.network_interface[0].addresses[0]
-    ip_bd   = libvirt_domain.bd.network_interface[0].addresses[0]
+    ip_bd   = var.ip_datos_bd
     usuario = var.usuario
   })
 }
-
 
 # Disco de datos de MariaDB: vacío e independiente del disco del sistema
 resource "libvirt_volume" "bd_datos" {

@@ -75,3 +75,9 @@ variable "tamano_disco_backup" {
   type        = number
   default     = 5
 }
+
+variable "dns_bd" {
+  description = "Servidor DNS que usa bd (sale a través de web)"
+  type        = string
+  default     = "1.1.1.1"
+}

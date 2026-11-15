@@ -6,7 +6,6 @@ output "ips" {
       datos = var.ip_datos_web
     }
     bd = {
-      nat   = libvirt_domain.bd.network_interface[0].addresses[0]
       datos = var.ip_datos_bd
     }
   }
