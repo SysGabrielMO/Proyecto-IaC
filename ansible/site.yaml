@@ -1,16 +1,23 @@
-- name: Configuración común
-  hosts: all
+# 1. web primero: es el router de bd, que no tiene salida propia a Internet
+- name: Router y cortafuegos en web
+  hosts: servidores_web
   become: true
   roles:
     - commons
+    - router
+    - cortafuegos
 
+# 2. bd ya puede instalar paquetes saliendo a través de web
 - name: Servidor de base de datos
   hosts: servidores_bd
   become: true
   roles:
+    - commons
+    - cortafuegos
     - bd
     - backup
- 
+
+# 3. Aplicación web, cuando la base de datos ya está lista
 - name: Servidor web
   hosts: servidores_web
   become: true
