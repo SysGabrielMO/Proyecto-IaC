@@ -1,0 +1,4 @@
+- name: Recargar el cortafuegos
+  ansible.builtin.service:
+    name: nftables
+    state: restarted

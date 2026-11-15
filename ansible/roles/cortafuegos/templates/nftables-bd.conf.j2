@@ -1,0 +1,26 @@
+#!/usr/sbin/nft -f
+# Cortafuegos de bd (generado por Ansible): todo bloqueado salvo lo permitido
+
+flush ruleset
+
+table inet filtro {
+    chain input {
+        type filter hook input priority 0; policy drop;
+
+        iif "lo" accept
+        ct state established,related accept
+        ct state invalid drop
+        ip protocol icmp accept
+
+        # SSH y MariaDB solo desde web
+        ip saddr {{ ip_datos_web }} tcp dport { 22, 3306 } accept
+    }
+
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+    }
+
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}

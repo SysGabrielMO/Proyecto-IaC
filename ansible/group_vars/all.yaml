@@ -13,3 +13,13 @@ paquetes_comunes:
   - curl
   - git
   - htop
+
+# Redes del escenario (cortafuegos)
+red_nat_cidr: 192.168.123.0/24
+red_datos_cidr: 10.0.100.0/24
+
+# Puertos TCP a los que bd puede salir a través de web (el 53 también por UDP)
+puertos_salida_bd:
+  - 53
+  - 80
+  - 443

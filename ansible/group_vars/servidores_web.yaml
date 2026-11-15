@@ -9,3 +9,6 @@ paquetes_web:
   - php-mysql
   - php-mbstring
   - mariadb-client
+
+# Cortafuegos
+cortafuegos_plantilla: nftables-web.conf.j2

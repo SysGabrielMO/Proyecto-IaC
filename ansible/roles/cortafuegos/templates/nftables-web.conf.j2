@@ -1,0 +1,41 @@
+#!/usr/sbin/nft -f
+# Cortafuegos de web (generado por Ansible): todo bloqueado salvo lo permitido
+
+flush ruleset
+
+table inet filtro {
+    chain input {
+        type filter hook input priority 0; policy drop;
+
+        iif "lo" accept
+        ct state established,related accept
+        ct state invalid drop
+        ip protocol icmp accept
+
+        # SSH y HTTP solo desde la red NAT
+        ip saddr {{ red_nat_cidr }} tcp dport { 22, 80 } accept
+    }
+
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+
+        ct state established,related accept
+
+        # bd solo puede salir a DNS, HTTP y HTTPS
+        ip saddr {{ ip_datos_bd }} udp dport 53 accept
+        ip saddr {{ ip_datos_bd }} tcp dport { {{ puertos_salida_bd | join(', ') }} } accept
+    }
+
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}
+
+table ip nat {
+    chain postrouting {
+        type nat hook postrouting priority 100; policy accept;
+
+        # El tráfico de bd sale con la IP de web
+        ip saddr {{ ip_datos_bd }} ip daddr != {{ red_datos_cidr }} masquerade
+    }
+}

@@ -16,3 +16,6 @@ backup_script: /usr/local/sbin/backup-mariadb.sh
 backup_hora: "3"
 backup_minuto: "0"
 backup_dias: 7
+
+# Cortafuegos
+cortafuegos_plantilla: nftables-bd.conf.j2
