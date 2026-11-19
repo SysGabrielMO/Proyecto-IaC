@@ -3,9 +3,10 @@ ip_datos_web: 10.0.100.10
 ip_datos_bd: 10.0.100.20
 
 # Base de datos de la aplicación
+# Las contraseñas están cifradas en vault.yaml (Ansible Vault)
 bd_nombre: guestbook
 bd_usuario: guestbook
-bd_password: guestbook
+bd_password: "{{ vault_bd_password }}"
 
 # Paquetes que se instalan en todas las máquinas
 paquetes_comunes:
