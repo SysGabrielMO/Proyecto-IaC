@@ -8,6 +8,10 @@ bd_nombre: guestbook
 bd_usuario: guestbook
 bd_password: "{{ vault_bd_password }}"
 
+# Usuario de phpMyAdmin: solo entra desde web y solo ve la base de datos de la aplicación
+pma_usuario: phpmyadmin
+pma_password: "{{ vault_pma_password }}"
+
 # Paquetes que se instalan en todas las máquinas
 paquetes_comunes:
   - vim
