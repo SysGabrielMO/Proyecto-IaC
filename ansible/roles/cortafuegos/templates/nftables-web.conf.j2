@@ -12,8 +12,8 @@ table inet filtro {
         ct state invalid drop
         ip protocol icmp accept
 
-        # SSH y HTTP solo desde la red NAT
-        ip saddr {{ red_nat_cidr }} tcp dport { 22, 80 } accept
+        # SSH, HTTP y HTTPS solo desde la red NAT
+        ip saddr {{ red_nat_cidr }} tcp dport { 22, 80, 443 } accept
     }
 
     chain forward {
