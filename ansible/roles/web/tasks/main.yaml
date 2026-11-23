@@ -30,6 +30,39 @@
     creates: /etc/apache2/mods-enabled/rewrite.load
   notify: Reiniciar Apache
 
+- name: Crear el directorio del certificado
+  ansible.builtin.file:
+    path: "{{ cert_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Generar el certificado autofirmado y su clave
+  ansible.builtin.command: >
+    openssl req -x509 -nodes -newkey rsa:2048
+    -days {{ cert_dias }}
+    -keyout {{ cert_clave }}
+    -out {{ cert_fichero }}
+    -subj "/CN={{ vhost_nombre }}"
+    -addext "subjectAltName=DNS:{{ vhost_nombre }}"
+  args:
+    creates: "{{ cert_fichero }}"
+  notify: Reiniciar Apache
+
+- name: Proteger la clave privada del certificado
+  ansible.builtin.file:
+    path: "{{ cert_clave }}"
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Activar el módulo SSL
+  ansible.builtin.command: a2enmod ssl
+  args:
+    creates: /etc/apache2/mods-enabled/ssl.load
+  notify: Reiniciar Apache
+
 - name: Activar el virtual host
   ansible.builtin.command: a2ensite guestbook
   args:

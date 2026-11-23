@@ -12,3 +12,9 @@ paquetes_web:
 
 # Cortafuegos
 cortafuegos_plantilla: nftables-web.conf.j2
+
+# HTTPS con certificado autofirmado
+cert_dir: /etc/ssl/guestbook
+cert_fichero: "{{ cert_dir }}/guestbook.crt"
+cert_clave: "{{ cert_dir }}/guestbook.key"
+cert_dias: 365
