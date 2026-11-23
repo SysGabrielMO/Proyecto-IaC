@@ -1,6 +1,19 @@
+# {{ ansible_managed }}
+
+# HTTP: solo redirige a HTTPS
 <VirtualHost *:80>
     ServerName {{ vhost_nombre }}
+    Redirect permanent / https://{{ vhost_nombre }}/
+</VirtualHost>
+
+# HTTPS con el certificado autofirmado
+<VirtualHost *:443>
+    ServerName {{ vhost_nombre }}
     DocumentRoot {{ vhost_docroot }}
+
+    SSLEngine on
+    SSLCertificateFile {{ cert_fichero }}
+    SSLCertificateKeyFile {{ cert_clave }}
 
     <Directory {{ vhost_docroot }}>
         AllowOverride All
