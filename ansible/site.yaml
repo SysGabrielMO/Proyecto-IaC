@@ -17,9 +17,10 @@
     - bd
     - backup
 
-# 3. Aplicación web, cuando la base de datos ya está lista
+# 3. Aplicación web y phpMyAdmin, cuando la base de datos ya está lista
 - name: Servidor web
   hosts: servidores_web
   become: true
   roles:
     - web
+    - phpmyadmin
