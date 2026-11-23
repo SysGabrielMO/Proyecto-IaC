@@ -102,7 +102,8 @@ resource "libvirt_cloudinit_disk" "bd_cloudinit" {
     mac_datos = local.mac_bd_datos
     ip_datos  = var.ip_datos_bd
     gateway   = var.ip_datos_web
-    dns       = var.dns_bd
+    # Por defecto, el DNS de libvirt (primera IP de la red NAT): algunas redes bloquean DNS externos
+    dns       = coalesce(var.dns_bd, cidrhost(var.red_nat_cidr, 1))
   })
 }
 

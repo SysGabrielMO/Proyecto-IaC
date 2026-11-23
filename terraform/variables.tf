@@ -77,7 +77,7 @@ variable "tamano_disco_backup" {
 }
 
 variable "dns_bd" {
-  description = "Servidor DNS que usa bd (sale a través de web)"
+  description = "Servidor DNS que usa bd. Vacío: el DNS de libvirt en la red NAT (funciona en cualquier red)"
   type        = string
-  default     = "1.1.1.1"
+  default     = ""
 }
