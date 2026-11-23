@@ -1,0 +1,7 @@
+<?php
+// {{ ansible_managed }}
+// phpMyAdmin se conecta a MariaDB en bd a través de la red de datos
+$cfg['Servers'][1]['host'] = '{{ ip_datos_bd }}';
+$cfg['Servers'][1]['port'] = '3306';
+$cfg['Servers'][1]['auth_type'] = 'cookie';
+$cfg['Servers'][1]['AllowRoot'] = false;

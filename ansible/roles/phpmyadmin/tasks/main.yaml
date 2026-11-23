@@ -1,0 +1,41 @@
+- name: No crear una base de datos local para phpMyAdmin (usa la de bd)
+  ansible.builtin.debconf:
+    name: phpmyadmin
+    question: phpmyadmin/dbconfig-install
+    value: "false"
+    vtype: boolean
+
+- name: No configurar Apache automáticamente (lo hace este rol)
+  ansible.builtin.debconf:
+    name: phpmyadmin
+    question: phpmyadmin/reconfigure-webserver
+    value: ""
+    vtype: multiselect
+
+- name: Instalar phpMyAdmin
+  ansible.builtin.apt:
+    name: phpmyadmin
+    state: present
+
+- name: Conectar phpMyAdmin con MariaDB en bd por la red de datos
+  ansible.builtin.template:
+    src: servidor-bd.php.j2
+    dest: /etc/phpmyadmin/conf.d/servidor-bd.php
+    owner: root
+    group: www-data
+    mode: "0640"
+
+- name: Publicar phpMyAdmin en Apache, solo para la red NAT
+  ansible.builtin.template:
+    src: phpmyadmin.conf.j2
+    dest: /etc/apache2/conf-available/phpmyadmin.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Recargar Apache
+
+- name: Activar la configuración de phpMyAdmin
+  ansible.builtin.command: a2enconf phpmyadmin
+  args:
+    creates: /etc/apache2/conf-enabled/phpmyadmin.conf
+  notify: Recargar Apache

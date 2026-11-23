@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+# phpMyAdmin en {{ pma_alias }}. En el puerto 80 la redirección a HTTPS del
+# virtual host tiene prioridad, así que solo se sirve por HTTPS.
+
+Alias {{ pma_alias }} /usr/share/phpmyadmin
+
+<Directory /usr/share/phpmyadmin>
+    Options SymLinksIfOwnerMatch
+    DirectoryIndex index.php
+    # Solo desde la red NAT (lista blanca)
+    Require ip {{ red_nat_cidr }}
+</Directory>
+
+# Directorios internos que no deben servirse
+<Directory /usr/share/phpmyadmin/templates>
+    Require all denied
+</Directory>
+<Directory /usr/share/phpmyadmin/libraries>
+    Require all denied
+</Directory>
+<Directory /usr/share/phpmyadmin/setup>
+    Require all denied
+</Directory>
